@@ -94,7 +94,7 @@ public class AlumnoCtrl {
         EntityManager em = emf.createEntityManager();
         try
         {
-            resp = em.createNamedQuery("alumnos.findAll", Alumnos.class).getResultList();
+            resp = em.createNamedQuery("Alumnos.findAll", Alumnos.class).getResultList();
         }
         catch(Exception ex)
         {

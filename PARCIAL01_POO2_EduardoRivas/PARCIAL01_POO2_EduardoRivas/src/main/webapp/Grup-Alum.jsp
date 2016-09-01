@@ -38,38 +38,29 @@
                 </div><!--/.container-fluid -->
       </nav>
             <div class="row">
-                <div class="col-md-5">
-                    <form action="AlumServ" method="Post">
+                <div class="col-md-4">
+                    <form action="GrupAlumServ" method="Post">
                         <div class="form-group">
                             <input type="hidden" class="form-control" name="cod" id="cod" value="${cod}">
                         </div>
+                        <jsp:useBean id="g" class="com.sv.udb.Controlador.GrupoCtrl" scope="page"/>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="nomb" name="nomb" placeholder="Nombre" value="${nomb}">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="apel" name="apel" placeholder="Apellido" value="${apel}">
-                        </div>
-                        <div class="form-group">
-                            <label>Fecha Nac.</label>
-                            <input type="date" class="form-control" id="fech" name="fech" placeholder="Fecha Nac." value="${fech}">
-                        </div>
-                        <div class="form-group">
-                            <input type="email" class="form-control" id="mail" name="mail" placeholder="Correo" value="${mail}">
-                        </div>
-                        <div class="form-group">
-                            <input type="number" class="form-control" id="tele" name="tele" placeholder="Telefono" value="${tele}">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="dire" name="dire" placeholder="Direccion" value="${dire}">
-                        </div>
-                        <div class="form-group">
-                            <select id="gene" name="gene">
-                                <option value="M">Masculino</option>
-                                <option value="F">Femenino</option>
+                            <select id="grup" class="form-control" name="grup">
+                                <c:forEach items="${g.consTodo()}" var="fila">
+                                    <option value="${fila.codiGrup}">${fila.nombGrup}</option>
+                                </c:forEach>
                             </select>
                         </div>
-                    
+                        <div class="form-group">
+                            <jsp:useBean id="a" class="com.sv.udb.Controlador.AlumnoCtrl" scope="page"/>
+                            <select id="alum" class="form-control" name="alum">
+                                <c:forEach items="${a.consTodo()}" var="fila">
+                                    <option value="${fila.codiAlum}">${fila.nombAlum} ${fila.apelAlum}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
                     <input id="send" name="CursBoton" type="submit" value="Guardar" class="btn btn-success" />
+                    
                     <input id="send" name="CursBoton" type="submit" value="Consultar" class="btn btn-info" />
                     <input id="send" name="CursBoton" type="submit" value="Modificar" class="btn btn-warning" />
                     <input id="send" name="CursBoton" type="submit" value="Eliminar" class="btn btn-danger" />
@@ -77,36 +68,52 @@
                                         
 
                 </div>
+                <div class="col-md-5">
+                <input  type="hidden" name="c" id="c" value="${c}"/>
+                <jsp:useBean id="no" class="com.sv.udb.Controlador.GruposAlumnosCtrl" scope="page"/>
                 <div class="col-md-7">
-                
-                <jsp:useBean id="no" class="com.sv.udb.Controlador.AlumnoCtrl" scope="page"/>
-                <div class="col-md-7">
-                    <table class="table table-bordered">
+                    <table  class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
-                                <th>Email</th>
-                                <th>Seleccione</th>
+                                <th>Grupo</th>
+                                <th>Alumno</th>
+                                <th>Estado</th>
                             </tr>
                         </thead>
                         <tbody>
-                        <c:forEach items="${no.consTodo()}" var="fila">
+                        <c:forEach items="${no.consTodo()}" var="alumno">
                             <tr>
-                                <td><c:out value="${fila.nombAlum}"></c:out></td>
-                                <td><c:out value="${fila.apelAlum}"></c:out></td>
-                                <td><c:out value="${fila.mailAlum}"></c:out></td>
-                                <td> <input type="radio" name="codiRadi" value="${fila.codiAlum}"/></td>
+                                <c:if test="${alumno.codiGrup.codiGrup ==c}">
+                                    <td><c:out value="${alumno.codiGrup.nombGrup}"></c:out></td>
+                                    <td><c:out value="${alumno.codiAlum.nombAlum} ${alumno.codiAlum.apelAlum}"></c:out></td>
+                                    <td> <input type="radio" name="codiRadi" value="${alumno.estaGrupAlum}"/></td>
+                                </c:if>
+                                        <c:if test="${c == null}">
+                                        <td><c:out value="${alumno.codiGrup.nombGrup}"></c:out></td>
+                                        <td><c:out value="${alumno.codiAlum.nombAlum} ${alumno.codiAlum.apelAlum}"></c:out></td>
+                                            <td> <input type="radio" name="codiRadi" value="${alumno.estaGrupAlum}"/></td>
+                                        </c:if>
+                                
                             </tr>
                         </c:forEach>
                         </tbody>
                     </table>
                 </div>
                 </div>
+                <div class="col-md-3">
+                    <label class="label-info">Grupos</label><br>
+                    <jsp:useBean id="si" class="com.sv.udb.Controlador.GruposAlumnosCtrl" scope="page"/>
+                    <c:forEach items="${si.consTodo()}" var="otro">
+                        <td> <input type="radio" name="codiRadi2" value="${otro.codiGrupAlum}"/>${otro.codiGrup.nombGrup}</td><br>
+                    </c:forEach>
+                        <input id="send" name="CursBoton" type="submit" value="Grupo" class="btn btn-success" />
+                </div>
                 </form>
+                    
             </div>
         </div>
     </body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="js/bootstrap.js" type="text/javascript"></script>
 </html>
+
